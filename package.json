@@ -1,0 +1,159 @@
+{
+  "name": "mimocode-vscode",
+  "displayName": "MiMoCode",
+  "description": "A native MiMoCode workspace for Visual Studio Code.",
+  "version": "0.1.6",
+  "publisher": "mimocode-community",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GlowLED/MiMoCode-for-VsCode.git"
+  },
+  "private": true,
+  "files": [
+    "dist",
+    "out",
+    "assets",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "vscode": "^1.104.0"
+  },
+  "categories": [
+    "AI",
+    "Other"
+  ],
+  "main": "./dist/extension.js",
+  "activationEvents": [
+    "onView:mimocode.chat"
+  ],
+  "contributes": {
+    "viewsContainers": {
+      "secondarySidebar": [
+        {
+          "id": "mimocode",
+          "title": "MiMoCode",
+          "icon": "assets/activity-bar.svg"
+        }
+      ]
+    },
+    "views": {
+      "mimocode": [
+        {
+          "type": "webview",
+          "id": "mimocode.chat",
+          "name": "MiMoCode"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "mimocode.open",
+        "title": "Open MiMoCode",
+        "category": "MiMoCode",
+        "icon": "assets/activity-bar.svg"
+      },
+      {
+        "command": "mimocode.newSession",
+        "title": "New MiMoCode Session",
+        "category": "MiMoCode"
+      },
+      {
+        "command": "mimocode.addSelectionToPrompt",
+        "title": "Add Selection to MiMoCode Prompt",
+        "category": "MiMoCode"
+      },
+      {
+        "command": "mimocode.openTerminal",
+        "title": "Open MiMoCode Terminal",
+        "category": "MiMoCode"
+      },
+      {
+        "command": "mimocode.retryConnection",
+        "title": "Retry MiMoCode Connection",
+        "category": "MiMoCode"
+      },
+      {
+        "command": "mimocode.selectCliPath",
+        "title": "Select MiMoCode CLI Executable",
+        "category": "MiMoCode"
+      }
+    ],
+    "menus": {
+      "editor/title": [
+        {
+          "command": "mimocode.open",
+          "group": "navigation"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "mimocode.addSelectionToPrompt",
+          "when": "editorTextFocus",
+          "group": "navigation@9"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "mimocode.open"
+        },
+        {
+          "command": "mimocode.newSession"
+        },
+        {
+          "command": "mimocode.openTerminal"
+        },
+        {
+          "command": "mimocode.selectCliPath"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "MiMoCode",
+      "properties": {
+        "mimocode.cliPath": {
+          "type": "string",
+          "default": "mimo",
+          "description": "Path to the MiMoCode CLI executable."
+        },
+        "mimocode.serverStartupTimeout": {
+          "type": "number",
+          "default": 15000,
+          "minimum": 1000,
+          "maximum": 60000,
+          "description": "Maximum time in milliseconds to wait for the local MiMoCode service."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build": "pnpm run build:extension && pnpm run build:webview",
+    "build:extension": "node esbuild.js --production",
+    "build:webview": "vite build",
+    "watch": "concurrently \"pnpm run watch:extension\" \"pnpm run watch:webview\"",
+    "watch:extension": "node esbuild.js --watch",
+    "watch:webview": "vite build --watch",
+    "check": "tsc --noEmit",
+    "test": "vitest run",
+    "package": "pnpm run build && vsce package --no-dependencies"
+  },
+  "dependencies": {
+    "@mimo-ai/sdk": "0.1.8",
+    "lucide-solid": "^0.468.0",
+    "solid-js": "^1.9.10",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@types/vscode": "^1.94.0",
+    "@vscode/vsce": "^3.2.1",
+    "concurrently": "^9.1.0",
+    "esbuild": "^0.25.0",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.5",
+    "vite-plugin-solid": "^2.11.0",
+    "vitest": "^3.0.0"
+  },
+  "packageManager": "pnpm@11.9.0"
+}
